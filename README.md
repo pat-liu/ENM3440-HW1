@@ -10,11 +10,49 @@ In this project, we aim to study the most popular "playstyle" archetypes, across
 
 ### Load in Data
 
-We import the above CSV dataset of tournament data into Google Drive, and then mount the data like so into our Jupyter Notebook.
+We import the above CSV dataset of tournament data into Google Drive, and then mount the data like so into our Jupyter Notebook. We must manually grant access to our Google account.
 
-```
+```python
 from google.colab import drive
 
 drive.mount("/content/gdrive")
 full_df = pd.read_csv("gdrive/My Drive/full_raw_data.csv")
 ```
+
+### Schema Overview
+
+We use the head command to display the first five rows of the table, along with the corresponding columns.
+
+```
+full_df.head()  # Display a portion of uncleaned data
+full_df.shape # Get number of rows, columns: (3663709, 14)
+```
+
+![Head](/ENM3440-HW1/assets/head.png)
+
+As seen, our indexes consist of:
+
+```python
+Index(['Timestamp', 'Tournament ID', 'Tournament Name', 'Event ID',
+       'Event Name', 'Set ID', 'Game Number', 'Stage Name', 'Winner ID',
+       'Loser ID', 'Winner Name', 'Loser Name', 'Winner Character',
+       'Loser Character'],
+      dtype='object')
+```
+
+In our mini-project, we primarily care about the characters used in each match, which are 'Winner Character' and 'Loser Character'.
+
+### Data Cleaning
+
+We inspect the values of the character columns, and filter out invalid placeholders ('Jacqui Briggs' appears to be a player name instead of a character, and 'Random Character' is far too arbitrary), removing the rows like so.
+
+```python
+full_df = full_df.loc[(full_df['Winner Character'] != 'Jacqui Briggs') & (full_df['Winner Character'] != 'Random Character')
+                      & (full_df['Loser Character'] != 'Jacqui Briggs') & (full_df['Loser Character'] != 'Random Character')]
+
+# Drop all rows with null/invalid values (in Winner/Loser Character)
+full_df.dropna(inplace=True)
+full_df.shape # Gives us (3435727, 14)
+```
+
+Since the number of rows has been reduced, we have succesfully cleaned null / invalid rows.
