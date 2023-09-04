@@ -1,7 +1,10 @@
-Instructions: Click on the raw button in the upper right hand corner of this box. Copy and paste the template into the README.md document on your github. Fill in the titles, information and links where prompted! Feel free to stray a bit to suit your project but try to stick to the format as closely as possible for consistency across DSWG projects.
+# Smash Ultimate Analysis: Popular Playstyles
 
-Project Name
-This project is a part of the Data Science Working Group at Code for San Francisco. Other DSWG projects can be found at the main GitHub repo.
+## Introduction
+
+Super Smash Brothers Ultimate is a crossover fighting game series published by Nintendo. Two players select characters to use from a collection of over 80 playable characters and face each other. The game is unique in that the aim is to increase damage counters and knock opponents off the stage instead of depleting life bars.
+
+In this project, we aim to study the most popular "playstyle" archetypes, across all characters from a dataset of matches (tournaments). The dataset in CSV form can be found from [ultimate game data](https://ultimategamedata.com/about).
 
 -- Project Status: [Active, On-Hold, Completed]
 Project Intro/Objective
