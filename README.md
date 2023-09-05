@@ -23,12 +23,12 @@ full_df = pd.read_csv("gdrive/My Drive/full_raw_data.csv")
 
 We use the head command to display the first five rows of the table, along with the corresponding columns.
 
-```
+```python
 full_df.head()  # Display a portion of uncleaned data
 full_df.shape # Get number of rows, columns: (3663709, 14)
 ```
 
-![Head](/ENM3440-HW1/assets/head.png)
+![Head](/assets/head.png)
 
 As seen, our indexes consist of:
 
@@ -56,3 +56,123 @@ full_df.shape # Gives us (3435727, 14)
 ```
 
 Since the number of rows has been reduced, we have succesfully cleaned null / invalid rows.
+
+### Character Analysis
+
+#### All Characters
+
+Let us confirm all the available playable characters below with a simple printing of all seen characters in our dataset.
+
+```python
+characters = set(full_df['Winner Character'].tolist() + full_df['Loser Character'].tolist())
+print(len(characters))
+characters
+```
+
+We get the following output:
+
+```python
+85
+{'Banjo-Kazooie',
+ 'Bayonetta',
+ 'Bowser',
+ 'Bowser Jr.',
+ 'Byleth',
+ 'Captain Falcon',
+ 'Chrom',
+ 'Cloud',
+ 'Corrin',
+ 'Daisy',
+ 'Dark Pit',
+ 'Dark Samus',
+ 'Diddy Kong',
+ 'Donkey Kong',
+ 'Dr. Mario',
+ 'Duck Hunt',
+ 'Falco',
+ 'Fox',
+ 'Ganondorf',
+ 'Greninja',
+ 'Hero',
+ 'Ice Climbers',
+ 'Ike',
+ 'Incineroar',
+ 'Inkling',
+ 'Isabelle',
+ 'Jigglypuff',
+ 'Joker',
+ 'Kazuya',
+ 'Ken',
+ 'King Dedede',
+ 'King K. Rool',
+ 'Kirby',
+ 'Link',
+ 'Little Mac',
+ 'Lucario',
+ 'Lucas',
+ 'Lucina',
+ 'Luigi',
+ 'Mario',
+ 'Marth',
+ 'Mega Man',
+ 'Meta Knight',
+ 'Mewtwo',
+ 'Mii Brawler',
+ 'Mii Gunner',
+ 'Mii Swordfighter',
+ 'Min Min',
+ 'Mr. Game & Watch',
+ 'Ness',
+ 'Olimar',
+ 'Pac-Man',
+ 'Palutena',
+ 'Peach',
+ 'Pichu',
+ 'Pikachu',
+ 'Piranha Plant',
+ 'Pit',
+ 'Pokemon Trainer',
+ 'Pyra & Mythra',
+ 'R.O.B.',
+ 'Richter',
+ 'Ridley',
+ 'Robin',
+ 'Rosalina',
+ 'Roy',
+ 'Ryu',
+ 'Samus',
+ 'Sephiroth',
+ 'Sheik',
+ 'Shulk',
+ 'Simon Belmont',
+ 'Snake',
+ 'Sonic',
+ 'Steve',
+ 'Terry',
+ 'Toon Link',
+ 'Villager',
+ 'Wario',
+ 'Wii Fit Trainer',
+ 'Wolf',
+ 'Yoshi',
+ 'Young Link',
+ 'Zelda',
+ 'Zero Suit Samus'}
+```
+
+#### Top 20 Used Characters
+
+We plot the top 20 used characters in preparation for ranking the top playstyles.
+
+```python
+player_a_character_df = full_df['Winner Character']
+player_b_character_df = full_df['Loser Character']
+
+characters_df = pd.concat([player_a_character_df, player_b_character_df])
+character_value_counts = characters_df.value_counts()
+
+character_counts_df = character_value_counts.rename_axis('Character').reset_index(name='Counts')
+character_counts_df = character_counts_df.sort_values("Counts", ascending=False).head(20)
+p = sns.catplot(data=character_counts_df, kind="bar", x="Character", y="Counts", height=5, aspect=3, order =character_counts_df.sort_values('Counts').Character)
+p.set_xticklabels(rotation=90)
+```
