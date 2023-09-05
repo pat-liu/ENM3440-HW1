@@ -181,7 +181,7 @@ p.set_xticklabels(rotation=90)
 
 #### Character to Playstyle Mapping
 
-We now categorize each character by their play-style, to further gives characteristics to each character. This is based off https://www.reddit.com/r/coolguides/comments/qwz76v/smash_ultimate_character_archetype_tier_list/.
+We now categorize each character by their play-style, to further gives characteristics to each character. This is based off this [reddit resource](https://www.reddit.com/r/coolguides/comments/qwz76v/smash_ultimate_character_archetype_tier_list/).
 
 We convert the above diagram into a character-playstyle mapping below for further processing.
 
@@ -285,3 +285,24 @@ full_df.head(5)
 ```
 
 ![Top 20](/assets/head2.png)
+
+#### Final Results: Most Popular Playstyles
+
+At last, we are able to derive and plot the most popular playstyles based on the counts of values in this new playstyle column across both players per match.
+
+```python
+#Get most popular playstyles
+playstyle_value_counts = full_df['Player A Character Playstyle'].value_counts() + full_df['Player B Character Playstyle'].value_counts()
+playstyle_counts_df = playstyle_value_counts.rename_axis('Playstyle').reset_index(name='Counts')
+p = sns.catplot(data=playstyle_counts_df, kind="bar", x="Playstyle", y="Counts", height=5, aspect=3, order = playstyle_counts_df.sort_values('Counts').Playstyle)
+p.set_xticklabels(rotation=90)
+```
+
+![Final](/assets/final.png)
+
+We are able to conclude that the Mix-Up playstyle is by far the most popular playstyle, and this makes sense – mix ups imply that the characters have a mixed assortment of moves and approaches, and are more 'balanced' with more opportunities to get an advantage.
+
+### Reflection
+
+Using LLMs such as ChatGPT was especially helpful to get useful syntax typs, especially when the schema of the dataset was known. When informing it to use such libraries such as Pandas, it gave specific code snippets that made it seamless to use with little modification.
+I had an overall high approach in mind to take, and the LLM helped me step by step in order to reach the final destination.
