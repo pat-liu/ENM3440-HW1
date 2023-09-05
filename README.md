@@ -176,3 +176,112 @@ character_counts_df = character_counts_df.sort_values("Counts", ascending=False)
 p = sns.catplot(data=character_counts_df, kind="bar", x="Character", y="Counts", height=5, aspect=3, order =character_counts_df.sort_values('Counts').Character)
 p.set_xticklabels(rotation=90)
 ```
+
+![Top 20](/assets/top20used.png)
+
+#### Character to Playstyle Mapping
+
+We now categorize each character by their play-style, to further gives characteristics to each character. This is based off https://www.reddit.com/r/coolguides/comments/qwz76v/smash_ultimate_character_archetype_tier_list/.
+
+We convert the above diagram into a character-playstyle mapping below for further processing.
+
+```python
+character_playstyle_mapping = {'Banjo-Kazooie': 'Mix-Up',
+ 'Bayonetta': 'Mix-Up',
+ 'Bowser': 'Bait-and-Punish',
+ 'Bowser Jr.': 'Trapper',
+ 'Byleth': 'Precision',
+ 'Captain Falcon' : 'Bait-and-Punish',
+ 'Chrom': 'Precision',
+ 'Cloud': 'Mix-Up',
+ 'Corrin': 'Precision',
+ 'Daisy': 'Mix-Up',
+ 'Dark Pit': 'All-Arounder',
+ 'Dark Samus': 'Zoner',
+ 'Diddy Kong': 'Mix-Up',
+ 'Donkey Kong': 'Grappler',
+ 'Dr. Mario' : 'All-Arounder',
+ 'Duck Hunt': 'Trapper',
+ 'Falco': 'Mix-Up',
+ 'Fox': 'Rushdown',
+ 'Ganondorf': 'Bait-and-Punish',
+ 'Greninja': 'Hit-and-Run',
+ 'Hero': 'Mix-Up',
+ 'Ice Climbers' : 'Puppeteer',
+ 'Ike': 'Precision',
+ 'Incineroar': 'Grappler',
+ 'Inkling': 'Hit-and-Run',
+ 'Isabelle': 'Trapper',
+ 'Jigglypuff' : 'Hit-and-Run',
+ 'Joker': 'Rushdown',
+ 'Kazuya' : 'Footsies',
+ 'Ken' : 'Footsies',
+ 'King Dedede' : 'Trapper',
+ 'King K. Rool': 'Bait-and-Punish',
+ 'Kirby' : 'All-Arounder',
+ 'Link': 'Zoner',
+ 'Little Mac': 'Rushdown',
+ 'Lucario':'Dynamic',
+ 'Lucas': 'Mix-Up',
+ 'Lucina': 'Precision',
+ 'Luigi' : 'Grappler',
+ 'Mario' : 'All-Arounder',
+ 'Marth': 'Precision',
+ 'Mega Man': 'Zoner',
+ 'Meta Knight': 'Hit-and-Run',
+ 'Mewtwo': 'Glass-Cannon',
+ 'Mii Brawler' : 'Rushdown',
+ 'Mii Gunner': 'Zoner',
+ 'Mii Swordfighter': 'Precision',
+ 'Min Min': 'Zoner',
+ 'Mr. Game & Watch': 'Glass-Cannon',
+ 'Ness' : 'Mix-Up',
+ 'Olimar': 'Mix-Up',
+ 'Pac-Man': 'Mix-Up',
+ 'Palutena': 'Mix-Up',
+ 'Peach': 'Mix-Up',
+ 'Pichu': 'Glass-Cannon',
+ 'Pikachu': 'Rushdown',
+ 'Piranha Plant': 'Trapper',
+ 'Pit' : 'All-Arounder',
+ 'Pokemon Trainer': 'Dynamic',
+ 'Pyra & Mythra':'Dynamic',
+ 'R.O.B.': 'Mix-Up',
+ 'Richter': 'Footsies',
+ 'Ridley' : 'Precision',
+ 'Robin': 'Trapper',
+ 'Rosalina': 'Puppeteer',
+ 'Roy': 'Rushdown',
+ 'Ryu': 'Trapper',
+ 'Samus': 'Zoner',
+ 'Sephiroth' : 'Precision',
+ 'Sheik': 'Rushdown',
+ 'Shulk': 'Precision',
+ 'Simon Belmont' : 'Trapper',
+ 'Snake' : 'Trapper',
+ 'Sonic': 'Hit-and-Run',
+ 'Steve': 'Trapper',
+ 'Terry' : 'Footsies',
+ 'Toon Link': 'Zoner',
+ 'Villager': 'Zoner',
+ 'Wario': 'Hit-and-Run',
+ 'Wii Fit Trainer': 'Hit-and-Run',
+ 'Wolf' : ' Mix-Up',
+ 'Yoshi' : 'Hit-and-Run',
+ 'Young Link': 'Zoner',
+ 'Zelda' : 'Trapper',
+ 'Zero Suit Samus': 'Hit-and-Run'}
+```
+
+We then process the mapping to create a new column 'X Character Playstyle' for each character (X can be A or B).
+
+```python
+def get_character_playstyle(row):
+  a_char, b_char = row['Winner Character'], row['Loser Character']
+  return character_playstyle_mapping[a_char], character_playstyle_mapping[b_char]
+
+full_df['Player A Character Playstyle'], full_df['Player B Character Playstyle'] = zip(*full_df.apply(lambda row: get_character_playstyle(row), axis=1))
+full_df.head(5)
+```
+
+![Top 20](/assets/head2.png)
